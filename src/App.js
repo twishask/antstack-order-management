@@ -63,7 +63,10 @@ function App() {
   }
 
   const sort = () => {
+    console.log("Testcase A");
     const sortedOrders = [].concat(filteredOrders).sort((a, b) => a.customerId > b.customerId)
+    console.log("Testcase B");
+    console.log(sortedOrders);
     setFilteredOrders(sortedOrders)
   }
 
