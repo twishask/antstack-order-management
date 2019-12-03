@@ -2,10 +2,6 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-}
-
 .App-header {
   background-color: #282c3440;
   min-height: 100vh;
@@ -16,8 +12,9 @@
   font-size: calc(7px + 2vmin);
 }
 
-.App-link {
-  color: #09d3ac;
+.Filters {
+  display: inline-block;
+  padding: 20px;
 }
 
 table {
@@ -29,18 +26,13 @@ tr {
   padding: 3px;
   height: 8vh;
   min-width: 100vw;
-  cursor: pointer;
 }
 
 td {
   padding: 7px;
-  min-width: 7vw;
+  min-width: 10vw;
 }
 
 th {
   padding: 10px
-}
-
-input[type=text] {
-  display: inline-block;
 }

@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import Orders from './Orders.js'
 
@@ -7,39 +6,72 @@ function App() {
 
   const [pincode, setPincode] = useState(0)
   const [date, setDate] = useState("")
-  const [filteredOrders, setFilteredOrders] = useState([])
+  const [filteredOrders, setFilteredOrders] = useState(Orders)
+
+  useEffect(() => {
+    applyfilters();
+  }, [pincode, date]);
 
   const handlePincode = (e) => {
-  //  setPincode(e.target.value)
-    //console.log(pincode);
     if (e.target.value > 99999 && e.target.value < 1000000){
-      //console.log("valid pin");
-      //console.log(pincode);
-      const inputPincode = Number(e.target.value)
-      const filteredOrders = []
-      Orders.map(order => {
-        if (order.deliveryPincode === inputPincode) {
-          filteredOrders.push(order)
-        }
-      })
-      setFilteredOrders(filteredOrders)
-      console.log(filteredOrders);
+      setPincode(Number(e.target.value))
+    }
+    else if (e.target.value==="") {
+      setPincode(0)
     }
   }
 
   const handleDate = (e) => {
-    setDate(e.target.value)
+    const inputDate = e.target.value
+    const dateFormat =  /^(0[1-9]|[12][0-9]|3[01])[\/\-](0[1-9]|1[012])[\/\-]\d{4}$/;
+    if (inputDate.match(dateFormat)){
+      setDate(e.target.value)
+    }
+    else {
+      setDate("")
+    }
+  }
+
+  const applyfilters = () => {
+    var filteredOrders = []
+    if (pincode!==0 && date!==""){
+      Orders.map(order => {
+        if (order.deliveryPincode===pincode && order.orderDate===date) {
+          filteredOrders.push(order)
+        }
+      })
+    }
+    else if (pincode!==0) {
+      Orders.map(order => {
+        if (order.deliveryPincode === pincode) {
+          filteredOrders.push(order)
+        }
+      })
+    }
+    else if (date!==""){
+      Orders.map(order => {
+        if (order.orderDate === date) {
+          filteredOrders.push(order)
+        }
+      })
+    }
+    else {
+      filteredOrders = Orders
+    }
+
+    setFilteredOrders(filteredOrders)
   }
 
   return (
     <div className="App">
       <header className="App-header">
-      Pincode:
-      <input type="text"
-        onChange={handlePincode}
-      />
-      Date:
+      <div className="Filters">
+      Pincode:&nbsp;
+      <input type="text" onChange={handlePincode}/>
+      &nbsp;&nbsp;&nbsp;
+      Date:&nbsp;
       <input type="text" onChange={handleDate} />
+      </div>
       <table>
       <tr>
       <th>Order Id</th>
@@ -48,9 +80,9 @@ function App() {
       <th>Order Date</th>
       <th>Items</th>
       </tr>
-      {Orders.map(order => {
+      {filteredOrders.map(order => {
         const items = order.items.split(";")
-        return<tr>
+        return <tr>
           <td>{order["orderId"]}</td>
           <td>{order["customerId"]}</td>
           <td>{order["deliveryPincode"]}</td>
@@ -58,7 +90,7 @@ function App() {
           <td>{items.map(item => {
             return (<div>{item}</div>)
           })}</td>
-        </tr>
+          </tr>
       })
       }
       </table>
@@ -68,29 +100,3 @@ function App() {
 }
 
 export default App;
-
-/*
-import CSVReader from 'react-csv-reader';
-import Papa from 'papaparse';
-import data from './Orders.csv';
-import FileViewer from 'react-file-viewer';
-const fs = require('fs');
-
-const objData = Papa.parse(data)
-const file = './sample.docx'
-const type = 'docx'
-console.log(file);
-console.log(objData);
-console.log(fs);
-const error = () =>{
-  console.log("error function");
-}
-
-<CSVReader onFileLoaded={data => console.log(data)} />
-<img src="/bag.jpeg" />
-
-<FileViewer
-fileType={type}
-filePath={file}
-onError={error()}/>
-*/
