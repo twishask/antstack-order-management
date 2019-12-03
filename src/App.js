@@ -62,6 +62,11 @@ function App() {
     setFilteredOrders(filteredOrders)
   }
 
+  const sort = () => {
+    const sortedOrders = [].concat(filteredOrders).sort((a, b) => a.customerId > b.customerId)
+    setFilteredOrders(sortedOrders)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -71,6 +76,8 @@ function App() {
       &nbsp;&nbsp;&nbsp;
       Date:&nbsp;
       <input type="text" onChange={handleDate} />
+      &nbsp;&nbsp;
+      <input type="button" onClick={sort} value="Sort by Customer ID" />
       </div>
       <table>
       <tr>

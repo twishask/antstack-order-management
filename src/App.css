@@ -36,3 +36,7 @@ td {
 th {
   padding: 10px
 }
+
+input[type="text"] {
+  max-width: 12vw;
+}
